@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Geçici / tek seferlik yerel scriptler
+/patchCards.js
+/patchCardsRevert.js
+/patchCardsRevert2.js
+/patchCardsRevert3.js
+/fixDGS.js
+/userCardsPatch.js
+/userCardsPatch4.js
