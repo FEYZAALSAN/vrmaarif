@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { MetAkademiLogo } from "@/components/brand/MetAkademiLogo";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
+    const router = useRouter();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { scrollY } = useScroll();
@@ -16,15 +18,6 @@ export function Navbar() {
     useMotionValueEvent(scrollY, "change", (latest) => {
         setIsScrolled(latest > 20);
     });
-
-    const navLinks = [
-        { name: "Sınavlar", href: "#exams" },
-        { name: "Sanal Sınıf", href: "#sanal-sinif" },
-        { name: "Zihin Haritası", href: "#mindmap" },
-        { name: "VR Teknolojisi", href: "#features" },
-        { name: "Başarılar", href: "#testimonials" },
-        { name: "SSS", href: "#faq" },
-    ];
 
     return (
         <motion.header
@@ -36,31 +29,65 @@ export function Navbar() {
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <div className="container-width flex items-center justify-between">
+            <div className="container-width flex items-center justify-between gap-4">
                 {/* Logo */}
-                <Link href="/" className="flex items-center z-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 rounded-xl">
-                    <MetAkademiLogo size="md" />
+                <Link
+                    href="/"
+                    className="z-50 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40"
+                >
+                    <span className="flex items-center gap-0 md:gap-0.5">
+                        <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl md:h-16 md:w-16">
+                            <Image
+                                src="/brand/metakademi-logo.png?v=20260401"
+                                alt="MetaAkademi logo"
+                                width={56}
+                                height={56}
+                                priority
+                                unoptimized
+                                className="h-[122%] w-[122%] max-w-none object-contain"
+                            />
+                        </span>
+                        <Image
+                            src="/brand/metaakademi-wordmark.png?v=20260401b"
+                            alt="MetaAkademi yazı logosu"
+                            width={400}
+                            height={120}
+                            priority
+                            unoptimized
+                            className="hidden h-20 w-auto -ml-6 object-contain md:block"
+                        />
+                    </span>
                 </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-8">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className="text-sm font-medium text-slate-700 hover:text-primary transition-colors dark:text-slate-300 dark:hover:text-primary"
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
+                {/* Center nav between logo and login */}
+                <nav className="hidden md:flex flex-1 items-center justify-center gap-12 text-base font-semibold text-slate-700">
+                    <Link href="#features" className="rounded-md px-1 py-0.5 transition-all duration-200 hover:-translate-y-1.5 hover:text-primary hover:drop-shadow-[0_2px_8px_rgba(79,70,229,0.35)]">
+                        Koçluk
+                    </Link>
+                    <Link href="/hedefimiz" className="rounded-md px-1 py-0.5 transition-all duration-200 hover:-translate-y-1.5 hover:text-primary hover:drop-shadow-[0_2px_8px_rgba(79,70,229,0.35)]">
+                        Hedefimiz
+                    </Link>
+                    <Link href="#testimonials" className="rounded-md px-1 py-0.5 transition-all duration-200 hover:-translate-y-1.5 hover:text-primary hover:drop-shadow-[0_2px_8px_rgba(79,70,229,0.35)]">
+                        Derecelerimiz
+                    </Link>
+                    <Link href="#features" className="rounded-md px-1 py-0.5 transition-all duration-200 hover:-translate-y-1.5 hover:text-primary hover:drop-shadow-[0_2px_8px_rgba(79,70,229,0.35)]">
+                        Biz Kimiz
+                    </Link>
                 </nav>
 
                 {/* Desktop CTA */}
                 <div className="hidden md:flex items-center gap-4">
-                    <Button variant="ghost" size="sm" className="text-slate-700 dark:text-slate-300">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-slate-700 dark:text-slate-300"
+                        onClick={() => router.push("/giris")}
+                    >
                         Giriş Yap
                     </Button>
-                    <Button size="sm">Hemen Başvur</Button>
+                    <Button size="sm" onClick={() => router.push("/basvur")}>
+                        Hemen Başvur
+                    </Button>
                 </div>
 
                 {/* Mobile Toggle */}
@@ -79,21 +106,24 @@ export function Navbar() {
                         exit={{ opacity: 0, y: -20 }}
                         className="absolute top-0 left-0 w-full h-screen bg-white/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden dark:bg-slate-950/95"
                     >
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className="text-2xl font-semibold text-slate-800 dark:text-slate-200"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
                         <div className="flex flex-col gap-4 mt-8 w-full px-8">
-                            <Button onClick={() => setIsMobileMenuOpen(false)} variant="outline" className="w-full">
+                            <Button
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    router.push("/giris");
+                                }}
+                                variant="outline"
+                                className="w-full"
+                            >
                                 Giriş Yap
                             </Button>
-                            <Button onClick={() => setIsMobileMenuOpen(false)} className="w-full">
+                            <Button
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    router.push("/basvur");
+                                }}
+                                className="w-full"
+                            >
                                 Hemen Başvur
                             </Button>
                         </div>

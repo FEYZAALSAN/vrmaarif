@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, BrainCircuit, MonitorPlay, Target, Trophy, Glasses, PenTool, Globe, MoveRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ArrowRight, BrainCircuit, MonitorPlay, Target, Glasses, PenTool, Globe, MoveRight, Star, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -70,26 +72,311 @@ const vrFeatures = [
 
 const testimonials = [
   {
-    name: "Elif Demir",
-    exam: "YKS - Eşit Ağırlık 500.",
-    content: "Matematik konularını 3 boyutlu görmek inanılmazdı. VR gözlükle çalışmak odağımı 2 katına çıkardı.",
-    avatar: "ED",
+    name: "Ayşe Yılmaz",
+    exam: "YKS Öğrencisi",
+    content:
+      "VR dersleriyle uzun saatler boyunca sıkılmadan çalışabildim. Özellikle geometri konularında netlerim ciddi şekilde arttı.",
+    avatar: "AY",
   },
   {
-    name: "Caner Yılmaz",
-    exam: "LGS - %0.1 Dilim",
-    content: "Sanal sınıfta mentörümle soru çözerken sanki gerçekten yanımdaymış gibi hissettim.",
-    avatar: "CY",
+    name: "Mehmet Demir",
+    exam: "KPSS Adayı",
+    content:
+      "Yapay zeka destekli geri bildirimlerle hangi konuda eksik olduğumu net gördüm. Çalışma planım çok daha verimli hale geldi.",
+    avatar: "MD",
   },
   {
-    name: "Selin Kaya",
-    exam: "KPSS - P3 92 Puan",
-    content: "Ev ortamında dikkatim çok dağılıyordu. VR odaklanma modu sayesinde verimli çalıştım.",
-    avatar: "SK",
+    name: "Zeynep Kaya",
+    exam: "LGS Öğrencisi",
+    content:
+      "Sanal laboratuvarlar ve etkileşimli içerikler sayesinde fen dersleri çok daha anlaşılır oldu. Öğrenmek gerçekten keyifli.",
+    avatar: "ZK",
+  },
+  {
+    name: "Ahmet Can",
+    exam: "TYT Adayı",
+    content:
+      "Odaklanma modunda çalışırken dikkatimi dağıtan hiçbir şey olmuyor. Kısa sürede düzenli çalışma alışkanlığı kazandım.",
+    avatar: "AC",
+  },
+  {
+    name: "Elif Nur",
+    exam: "AYT Öğrencisi",
+    content:
+      "Mentör görüşmeleri ve anlık analiz raporları sayesinde hangi konuda hızlanmam gerektiğini çok net gördüm.",
+    avatar: "EN",
+  },
+  {
+    name: "Berk Arslan",
+    exam: "DGS Adayı",
+    content:
+      "Konu tekrarlarını VR ortamında yapmak motivasyonumu arttırdı. Deneme sonuçlarım istikrarlı şekilde yükseldi.",
+    avatar: "BA",
+  },
+];
+
+const vroomFeatures = [
+  {
+    title: "Canlı Vroom Oturumu",
+    description: "Mentör ve öğrenciler aynı anda bağlanır, konu anlatımı ve soru çözümü gerçek zamanlı ilerler.",
+  },
+  {
+    title: "Konuya Özel Odalar",
+    description: "Matematik, fen veya dil gibi farklı dersler için ayrı vroom odalarında odaklı çalışma yapılır.",
+  },
+  {
+    title: "Kayıt + Tekrar",
+    description: "Ders sonrası vroom kayıtlarıyla hızlı tekrar yapılır, eksik kalan noktalar kolayca tamamlanır.",
+  },
+];
+
+const packageTabs = [
+  { id: "yks", label: "YKS" },
+  { id: "lgs", label: "LGS" },
+  { id: "ydt", label: "YDT" },
+  { id: "kpss", label: "KPSS" },
+  { id: "dgs", label: "DGS" },
+  { id: "uni", label: "Üniversite Dersleri" },
+] as const;
+
+type PackageTab = (typeof packageTabs)[number]["id"];
+
+const packageData: Record<
+  PackageTab,
+  Array<{
+    title: string;
+    oldPrice?: string;
+    price: string;
+    period: string;
+    desc: string;
+    badge?: string;
+    items: string[];
+    cta: string;
+    featured?: boolean;
+  }>
+> = {
+  yks: [
+    {
+      title: "MetaAkademi YKS Koçluk",
+      oldPrice: "10.347₺",
+      price: "8.800₺",
+      period: "12 Hafta",
+      desc: "TYT-AYT sürecinde birebir mentörlük ve disiplinli takip.",
+      badge: "En Popüler",
+      featured: true,
+      items: [
+        "Birebir mentör ve uzman PDR desteği",
+        "Kişiye özel haftalık plan",
+        "Haftada 2 canlı görüşme",
+        "7/24 mesajlaşma ve takip",
+        "MetaAkademi paneli sınırsız erişim",
+      ],
+      cta: "YKS Koçluk Başlat",
+    },
+    {
+      title: "MetaAkademi YKS Tam Paket",
+      price: "4.399₺",
+      period: "4 Hafta",
+      desc: "Koçluk, deneme ve analiz sistemini tek pakette birleştiren çözüm.",
+      items: [
+        "Günlük plan + haftalık analiz",
+        "TYT/AYT deneme setleri",
+        "Video çözümler ve etüt desteği",
+        "Hedef revize görüşmeleri",
+        "Sınırsız panel erişimi",
+      ],
+      cta: "YKS Tam Paket Al",
+    },
+  ],
+  lgs: [
+    {
+      title: "MetaAkademi LGS Paket",
+      price: "2.499₺",
+      period: "8 Hafta",
+      desc: "LGS odaklı konu takibi, etüt ve deneme sistemi.",
+      featured: true,
+      items: [
+        "LGS'ye özel haftalık plan",
+        "Türkçe, matematik, fen mentörlüğü",
+        "Haftada 1 canlı mentör görüşmesi",
+        "Mini deneme takibi",
+        "Veli bilgilendirme raporu",
+      ],
+      cta: "LGS Paketine Başla",
+    },
+    {
+      title: "MetaAkademi LGS Yoğunlaştırılmış",
+      price: "3.299₺",
+      period: "8 Hafta",
+      desc: "Eksik konulara hızlandırılmış kapanış ve net artırma programı.",
+      items: [
+        "Haftalık yoğun etüt planı",
+        "Konu kapanış testleri",
+        "Canlı soru çözüm seansları",
+        "Sınav simülasyon denemeleri",
+        "Bireysel performans raporu",
+      ],
+      cta: "Yoğun Programı Al",
+    },
+  ],
+  ydt: [
+    {
+      title: "MetaAkademi YDT Paket",
+      price: "2.999₺",
+      period: "8 Hafta",
+      desc: "Dil sınavına özel kelime, paragraf ve deneme odaklı program.",
+      featured: true,
+      items: [
+        "YDT haftalık çalışma planı",
+        "Kelime + okuma stratejileri",
+        "Haftada 1 canlı mentör görüşmesi",
+        "Deneme analizi ve net takibi",
+        "Gelişim paneli raporları",
+      ],
+      cta: "YDT Paketine Başla",
+    },
+    {
+      title: "MetaAkademi YDT Plus",
+      price: "3.499₺",
+      period: "8 Hafta",
+      desc: "Yoğun okuma, çeviri ve soru çözüm pratikleriyle üst seviye hazırlık.",
+      items: [
+        "Ekstra reading atölyeleri",
+        "Soru tipi bazlı hızlandırma",
+        "Haftalık mini deneme",
+        "Bireysel geri bildirim",
+        "Sınırsız kaynak erişimi",
+      ],
+      cta: "YDT Plus Al",
+    },
+  ],
+  kpss: [
+    {
+      title: "MetaAkademi KPSS Koçluk",
+      price: "3.199₺",
+      period: "8 Hafta",
+      desc: "KPSS lisans önlisans adayları için planlı çalışma ve takip programı.",
+      featured: true,
+      items: [
+        "Ders bazlı haftalık hedefler",
+        "Haftada 2 kontrol görüşmesi",
+        "Soru bankası yönlendirmesi",
+        "Deneme performans analizi",
+        "Sınırsız panel erişimi",
+      ],
+      cta: "KPSS Koçluk Başlat",
+    },
+    {
+      title: "MetaAkademi KPSS Tam Paket",
+      price: "4.099₺",
+      period: "8 Hafta",
+      desc: "Koçluk, tekrar planı ve yoğun deneme takibini bir arada sunar.",
+      items: [
+        "Canlı etüt + soru çözüm desteği",
+        "Eksik konu tamamlama takvimi",
+        "Haftalık deneme karnesi",
+        "Motivasyon ve disiplin takibi",
+        "Önceliklendirilmiş çalışma planı",
+      ],
+      cta: "KPSS Tam Paket Al",
+    },
+  ],
+  dgs: [
+    {
+      title: "MetaAkademi DGS Paket",
+      price: "2.799₺",
+      period: "8 Hafta",
+      desc: "Sayısal-sözel dengeye özel DGS koçluk ve deneme çözüm planı.",
+      featured: true,
+      items: [
+        "DGS odaklı günlük plan",
+        "Haftalık hedef takip görüşmeleri",
+        "Paragraf + problem hızlandırma",
+        "Deneme analiz karnesi",
+        "Panel üzerinden ilerleme takibi",
+      ],
+      cta: "DGS Paketine Başla",
+    },
+    {
+      title: "MetaAkademi DGS Plus",
+      price: "3.299₺",
+      period: "8 Hafta",
+      desc: "Süre yönetimi ve net artırmaya odaklı yoğun hazırlık programı.",
+      items: [
+        "Haftalık hız kampı",
+        "Birebir çözüm odaklı mentörlük",
+        "Soru tipi özel tekrarlar",
+        "Sınav provası simülasyonları",
+        "Gelişim raporu ve revize plan",
+      ],
+      cta: "DGS Plus Al",
+    },
+  ],
+  uni: [
+    {
+      title: "MetaAkademi Üniversite Ders Koçluğu",
+      price: "2.299₺",
+      period: "6 Hafta",
+      desc: "Üniversite derslerinde düzenli ilerleme için kişisel çalışma sistemi.",
+      featured: true,
+      items: [
+        "Ders bazlı çalışma takvimi",
+        "Vize/final hazırlık planı",
+        "Haftalık mentör görüşmeleri",
+        "Ödev ve kaynak yönlendirmesi",
+        "Performans analizi",
+      ],
+      cta: "Ders Koçluğuna Başla",
+    },
+    {
+      title: "MetaAkademi Üniversite Başarı Paketi",
+      price: "3.099₺",
+      period: "8 Hafta",
+      desc: "Birden fazla ders için yoğun takip, etüt ve sınav hazırlık desteği.",
+      items: [
+        "Ders gruplarına özel planlama",
+        "Yoğun etüt ve tekrar sistemi",
+        "Haftalık geri bildirim raporu",
+        "Sınav dönemi hızlandırma",
+        "Sınırsız panel ve kaynak erişimi",
+      ],
+      cta: "Başarı Paketini Al",
+    },
+  ],
+};
+
+const faqItems = [
+  {
+    q: "MetaAkademi kimler için uygun?",
+    a: "YKS, LGS, YDT, KPSS, DGS ve üniversite derslerinde planlı ilerlemek isteyen öğrenciler için uygundur. Seviyenize göre kişisel yol haritası oluşturulur.",
+  },
+  {
+    q: "Program nasıl kişiselleştiriliyor?",
+    a: "Haftalık hedefleriniz, çözüm hızınız ve deneme sonuçlarınız analiz edilerek size özel bir çalışma planı hazırlanır. Süreç boyunca plan düzenli olarak güncellenir.",
+  },
+  {
+    q: "Koçluk görüşmeleri ne sıklıkta yapılıyor?",
+    a: "Pakete göre haftada 1 veya 2 canlı görüşme yapılır. Görüşmelerde hedef takibi, eksik konu analizi ve bir sonraki hafta planı netleştirilir.",
+  },
+  {
+    q: "VR gözlüğüm yoksa yine de katılabilir miyim?",
+    a: "Evet. Bilgisayar veya tablet üzerinden sanal ekran moduyla derslere katılabilirsiniz. Uygun paketlerde cihaz desteği seçenekleri için ekibimizle görüşebilirsiniz.",
+  },
+  {
+    q: "Deneme ve performans takibi nasıl yapılıyor?",
+    a: "Çözdüğünüz denemeler panelde analiz edilir. Net değişimi, konu bazlı başarı oranı ve zaman yönetimi raporlarıyla gelişiminiz adım adım izlenir.",
+  },
+  {
+    q: "Ödeme ve iade süreci nasıl işliyor?",
+    a: "Ödemeler güvenli şekilde alınır. Paket şartlarına ve katılım durumuna göre iade politikamız uygulanır. Detaylar kayıt öncesinde şeffaf olarak paylaşılır.",
   },
 ];
 
 export default function Home() {
+  const router = useRouter();
+  const [selectedPackageTab, setSelectedPackageTab] = useState<PackageTab>("yks");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-white text-slate-900 font-sans selection:bg-purple-500/30">
       <Navbar />
@@ -125,19 +412,6 @@ export default function Home() {
           />
 
           <div className="container-width relative z-10 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-8 inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-4 py-2 shadow-[0_1px_0_rgb(255_255_255/0.9)_inset,0_8px_32px_-8px_rgb(99_102_241/0.18)] ring-1 ring-indigo-500/[0.08] backdrop-blur-md"
-            >
-              <span className="flex h-2 w-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 shadow-[0_0_12px_rgb(139_92_246/0.6)]" />
-              <Glasses className="h-4 w-4 text-violet-600" />
-              <span className="text-sm font-medium tracking-tight text-slate-700">
-                Geleceğin Eğitim Teknolojisi Şimdi Evinizde
-              </span>
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -182,6 +456,7 @@ export default function Home() {
               <Button
                 size="lg"
                 className="h-16 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-10 text-lg text-white shadow-lg shadow-indigo-500/25 ring-1 ring-white/20 transition-all duration-300 hover:from-indigo-500 hover:to-purple-500 hover:shadow-indigo-500/35"
+                onClick={() => router.push("/basvur")}
               >
                 Ücretsiz VR Deneyimi Başlat <ArrowRight className="ml-2 h-6 w-6" />
               </Button>
@@ -193,6 +468,123 @@ export default function Home() {
                 Tanıtım Videosunu İzle
               </Button>
             </motion.div>
+
+            {/* Satış Paketleri */}
+            <motion.section
+              id="satis-paketleri"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.1 }}
+              className="mt-14 rounded-[2rem] border border-slate-200 bg-slate-50/70 p-5 shadow-sm md:mt-18 md:p-8"
+            >
+              <div className="mb-8 text-center">
+                <h2 className="font-heading text-2xl font-bold text-slate-900 md:text-3xl">
+                  Size Uygun Paketi Seçin
+                </h2>
+                <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 md:text-base">
+                  Eğitimin 'Meta' hali: Hayalindeki üniversiteye giden yolu şansa bırakma! Derece yapmış mentörler ve alanında uzman koçlarla, hedefine ulaşana dek yanındayız.
+                </p>
+              </div>
+
+              <div className="mx-auto mb-6 w-full max-w-4xl rounded-full bg-white p-1.5 shadow-[0_10px_24px_-16px_rgba(79,70,229,0.45)] ring-1 ring-slate-200">
+                <div className="grid grid-cols-3 gap-1 md:grid-cols-6">
+                  {packageTabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => setSelectedPackageTab(tab.id)}
+                      className={`rounded-full px-3 py-2.5 text-xs font-bold transition md:text-sm ${
+                        selectedPackageTab === tab.id
+                          ? "bg-gradient-to-r from-indigo-600 to-violet-500 text-white shadow-md"
+                          : "text-violet-700 hover:bg-violet-50"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid gap-5 lg:grid-cols-2">
+                {packageData[selectedPackageTab].map((pkg, idx) => (
+                  <article
+                    key={`${selectedPackageTab}-${pkg.title}`}
+                    className={`relative flex h-full flex-col rounded-2xl bg-white p-6 ${
+                      pkg.featured
+                        ? "border-2 border-violet-500 shadow-[0_18px_30px_-20px_rgba(124,58,237,0.45)]"
+                        : "border border-slate-200 shadow-sm"
+                    }`}
+                  >
+                    {pkg.badge ? (
+                      <span className="absolute right-4 top-4 rounded-full bg-violet-600 px-3 py-1 text-xs font-semibold text-white">
+                        {pkg.badge}
+                      </span>
+                    ) : null}
+                    <h3 className="text-xl font-bold text-slate-900">{pkg.title}</h3>
+                    {idx === 0 ? (
+                      <p className="mt-1 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                        Sınırlı Kontenjan
+                      </p>
+                    ) : null}
+                    {pkg.oldPrice ? (
+                      <p className="mt-4 text-sm text-slate-400 line-through">{pkg.oldPrice}</p>
+                    ) : (
+                      <div className="mt-4" />
+                    )}
+                    <p className="text-4xl font-extrabold tracking-tight text-violet-700">
+                      {pkg.price} <span className="text-base font-semibold text-slate-500">/ {pkg.period}</span>
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-600">{pkg.desc}</p>
+                    <ul className="mt-5 space-y-2 text-sm text-slate-700">
+                      {pkg.items.map((item) => (
+                        <li key={item}>• {item}</li>
+                      ))}
+                    </ul>
+                    <Button className="mt-auto h-12 w-full rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-500 text-white hover:from-indigo-500 hover:to-violet-400">
+                      {pkg.cta}
+                    </Button>
+                  </article>
+                ))}
+              </div>
+            </motion.section>
+
+            {/* Vroomlarda eğitim alanı */}
+            <motion.section
+              id="vroom-egitim"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.1 }}
+              className="mt-16 rounded-[2rem] border border-blue-200/70 bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-6 shadow-[0_20px_60px_-20px_rgba(37,99,235,0.25)] md:mt-20 md:p-10"
+            >
+              <div className="grid items-center gap-8 lg:grid-cols-[240px_1fr]">
+                <div className="mx-auto w-full max-w-[240px] rounded-2xl bg-[#0f50d8] p-4 shadow-lg shadow-blue-500/20">
+                  <img
+                    src="/brand/vroom-logo.png"
+                    alt="Vroom Logo"
+                    className="h-20 w-full object-contain"
+                  />
+                </div>
+
+                <div className="text-left">
+                  <h2 className="font-heading text-3xl font-bold leading-tight text-slate-900 md:text-4xl">
+                    Vroom ile eğitimi{" "}
+                    <span className="text-blue-600">daha odaklı ve daha etkili</span> hale getiriyoruz
+                  </h2>
+                  <p className="mt-3 max-w-3xl text-slate-600 md:text-lg">
+                    Öğrenciler aynı ortamda buluşur, mentör rehberliğinde ilerler ve sınav sürecini düzenli takip eder.
+                  </p>
+
+                  <ul className="mt-6 grid gap-3 text-sm text-slate-700 md:grid-cols-2">
+                    <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">Canlı Vroom oturumları ve anlık etkileşim</li>
+                    <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">Konuya özel odalarda hedefe yönelik çalışma</li>
+                    <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">Ders kayıtları ile hızlı tekrar imkanı</li>
+                    <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">Mentör takibiyle düzenli gelişim planı</li>
+                  </ul>
+                </div>
+              </div>
+            </motion.section>
 
             {/* Sanal Sınıf — zihin haritalarının üstünde */}
             <div
@@ -253,7 +645,11 @@ export default function Home() {
                   öğretmeniniz ve diğer öğrencilerle etkileşime geçin. VR teknolojisi
                   sayesinde %100 odaklanma sağlayarak sınavlara hazırlığınızı en üst düzeye çıkarın.
                 </p>
-                <Button size="lg" className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full px-10 h-14 text-lg shadow-xl shadow-amber-500/30 transition-transform hover:-translate-y-1">
+                <Button
+                  size="lg"
+                  className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full px-10 h-14 text-lg shadow-xl shadow-amber-500/30 transition-transform hover:-translate-y-1"
+                  onClick={() => router.push("/basvur")}
+                >
                   Hemen Başla!
                 </Button>
               </motion.div>
@@ -382,63 +778,117 @@ export default function Home() {
         </section>
 
         {/* Testimonials */}
-        <section className="py-24 relative bg-white">
+        <section id="testimonials" className="scroll-mt-28 py-24 relative bg-white">
           <div className="container-width">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading text-slate-900">
-                Derece Yapan Öğrencilerimiz
+                Öğrenci Yorumları
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map((t, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="bg-slate-50 p-8 rounded-2xl border border-slate-200 relative hover:bg-white hover:shadow-lg transition-all"
-                >
-                  <div className="absolute top-8 right-8 text-yellow-500/20">
-                    <Trophy className="w-10 h-10 fill-current" />
-                  </div>
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center text-slate-800 font-bold text-lg">
-                      {t.avatar}
+            <div className="relative overflow-hidden">
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-white to-transparent" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-white to-transparent" />
+              <div className="testimonial-track flex w-max gap-6 py-2">
+                {[...testimonials, ...testimonials].map((t, i) => (
+                  <article
+                    key={`${t.name}-${i}`}
+                    className="w-[310px] rounded-2xl border border-slate-200 bg-slate-50 p-6 transition-all hover:-translate-y-1 hover:bg-white hover:shadow-lg"
+                  >
+                    <div className="mb-4 flex items-center gap-1 text-amber-400">
+                      {Array.from({ length: 5 }).map((_, idx) => (
+                        <Star key={idx} className="h-4 w-4 fill-current" />
+                      ))}
                     </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">{t.name}</h4>
-                      <p className="text-xs text-indigo-600 font-semibold">{t.exam}</p>
+                    <p className="min-h-[118px] text-slate-600">
+                      "{t.content}"
+                    </p>
+                    <div className="mt-5 flex items-center gap-3">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-slate-200 text-sm font-bold text-slate-700">
+                        {t.avatar}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900">{t.name}</h4>
+                        <p className="text-sm text-slate-500">{t.exam}</p>
+                      </div>
                     </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SSS — navbar #faq */}
+        <section id="faq" className="scroll-mt-28 py-24 relative bg-slate-50 border-y border-slate-200">
+          <div className="container-width max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading text-slate-900 text-center">
+              Sık sorulan sorular
+            </h2>
+            <p className="text-slate-600 text-center mb-12 max-w-xl mx-auto">
+              VR eğitimi ve başvuru süreci hakkında merak edilenler.
+            </p>
+            <div className="space-y-3">
+              {faqItems.map((item, index) => {
+                const isOpen = openFaq === index;
+                return (
+                  <div key={item.q} className="rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaq(isOpen ? null : index)}
+                      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                    >
+                      <span className="font-semibold text-slate-900">{item.q}</span>
+                      <ChevronDown
+                        className={`h-5 w-5 shrink-0 text-slate-500 transition-transform duration-200 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    {isOpen ? (
+                      <div className="border-t border-slate-100 px-5 pb-4 pt-3 text-slate-600">
+                        {item.a}
+                      </div>
+                    ) : null}
                   </div>
-                  <p className="text-slate-600 italic">"{t.content}"</p>
-                </motion.div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 relative overflow-hidden bg-white">
+        <section className="py-16 relative overflow-hidden bg-white">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-indigo-50/50 pointer-events-none"></div>
           <div className="container-width relative z-10">
-            <div className="relative rounded-3xl overflow-hidden bg-indigo-600 px-6 py-20 text-center md:px-20 md:py-28 shadow-2xl shadow-indigo-200 border border-indigo-500">
+            <div className="relative rounded-3xl overflow-hidden bg-indigo-600 px-6 py-14 text-center md:px-16 md:py-18 shadow-2xl shadow-indigo-200 border border-indigo-500">
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1626379953822-baec8cd418e7?q=80&w=2832&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay opacity-30 grayscale"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-indigo-900/80 to-transparent"></div>
 
               <div className="relative z-10 max-w-3xl mx-auto">
-                <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 font-heading">
+                <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 font-heading">
                   VR Gözlüğünüz Yok mu?
                 </h2>
-                <p className="text-indigo-100 text-lg mb-10">
+                <p className="text-indigo-100 text-base md:text-lg mb-7">
                   Endişelenmeyin! Kayıt olan ilk 100 öğrenciye VR başlığını biz gönderiyoruz veya bilgisayar/tablet üzerinden "Sanal Ekran" moduyla katılabilirsiniz.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" variant="secondary" className="h-14 px-10 text-lg bg-white text-indigo-950 hover:bg-slate-200 border-0 shadow-xl font-bold">
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="h-12 px-8 text-base bg-white text-indigo-950 hover:bg-slate-200 border-0 shadow-xl font-bold"
+                    onClick={() => router.push("/basvur")}
+                  >
                     Hemen Başvurun
                   </Button>
-                  <Button size="lg" variant="outline" className="h-14 px-10 text-lg bg-transparent border-white/30 text-white hover:bg-white/10 hover:border-white hover:text-white">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="h-12 px-8 text-base bg-transparent border-white/30 text-white hover:bg-white/10 hover:border-white hover:text-white"
+                    onClick={() => {
+                      document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                  >
                     Detaylı Bilgi Alın
                   </Button>
                 </div>
@@ -449,6 +899,20 @@ export default function Home() {
       </main>
 
       <Footer />
+      <style jsx global>{`
+        @keyframes testimonial-scroll {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(calc(-50% - 12px));
+          }
+        }
+
+        .testimonial-track {
+          animation: testimonial-scroll 34s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

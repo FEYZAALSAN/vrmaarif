@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MetAkademiLogo } from "@/components/brand/MetAkademiLogo";
+import Image from "next/image";
 
 export function Footer() {
     return (
@@ -7,8 +7,30 @@ export function Footer() {
             <div className="container-width">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="col-span-1 md:col-span-1">
-                        <Link href="/" className="mb-4 inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 rounded-xl">
-                            <MetAkademiLogo size="sm" />
+                        <Link
+                            href="/"
+                            className="mb-4 inline-block rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40"
+                        >
+                            <span className="flex items-center gap-0">
+                                <span className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg">
+                                    <Image
+                                        src="/brand/metakademi-logo.png?v=20260401"
+                                        alt="MetaAkademi logo"
+                                        width={48}
+                                        height={48}
+                                        unoptimized
+                                        className="h-[122%] w-[122%] max-w-none object-contain"
+                                    />
+                                </span>
+                                <Image
+                                    src="/brand/metaakademi-wordmark.png?v=20260401b"
+                                    alt="MetaAkademi yazı logosu"
+                                    width={320}
+                                    height={96}
+                                    unoptimized
+                                    className="h-14 w-auto -ml-6 object-contain"
+                                />
+                            </span>
                         </Link>
                         <p className="text-sm text-slate-500 max-w-xs">
                             Geleceğinizi şekillendirmek için ihtiyacınız olan rehberlik ve destek burada.
@@ -29,7 +51,7 @@ export function Footer() {
                         <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                             <li><Link href="#" className="hover:text-primary transition-colors">Blog</Link></li>
                             <li><Link href="#" className="hover:text-primary transition-colors">Kariyer Rehberi</Link></li>
-                            <li><Link href="#" className="hover:text-primary transition-colors">SSS</Link></li>
+                            <li><Link href="/#faq" className="hover:text-primary transition-colors">SSS</Link></li>
                         </ul>
                     </div>
 
