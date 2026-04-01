@@ -49,8 +49,8 @@ export default function BasvurPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f7fb]">
-      <main className="flex min-h-screen w-full">
+    <div className="min-h-screen bg-[#f7f7fb] pt-10">
+      <main className="flex min-h-[calc(100vh-2.5rem)] w-full">
         <div className="hidden w-1/2 lg:block">
           <Image
             src="/brand/basvur-side-visual.png"

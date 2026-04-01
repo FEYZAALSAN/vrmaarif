@@ -386,10 +386,15 @@ export default function Home() {
         <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-600/5 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] animate-pulse delay-700" />
         <div className="absolute bottom-[-10%] left-[30%] w-[800px] h-[800px] bg-cyan-600/5 rounded-full blur-[140px] animate-pulse delay-1000" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 brightness-150 contrast-100 mix-blend-overlay"></div>
+        <div
+          className="absolute inset-0 opacity-10 brightness-150 contrast-100 mix-blend-overlay"
+          style={{
+            backgroundImage: "url(https://grainy-gradients.vercel.app/noise.svg)",
+          }}
+        />
       </div>
 
-      <main className="flex-grow z-10 pt-20">
+      <main className="z-10 flex-grow pt-32">
         {/* Hero Section */}
         <section className="relative pt-24 pb-32 overflow-hidden">
           {/* Yerel atmosfer: yumuşak ışık + grid (minimal, etkileyici) */}
@@ -719,7 +724,7 @@ export default function Home() {
           </div>
         </section>
         {/* VR Features Section */}
-        <section id="features" className="py-24 relative bg-white">
+        <section id="features" className="scroll-mt-40 py-24 relative bg-white">
           <div className="container-width">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading text-slate-900">
@@ -778,7 +783,7 @@ export default function Home() {
         </section>
 
         {/* Testimonials */}
-        <section id="testimonials" className="scroll-mt-28 py-24 relative bg-white">
+        <section id="testimonials" className="scroll-mt-40 py-24 relative bg-white">
           <div className="container-width">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading text-slate-900">
@@ -820,7 +825,7 @@ export default function Home() {
         </section>
 
         {/* SSS — navbar #faq */}
-        <section id="faq" className="scroll-mt-28 py-24 relative bg-slate-50 border-y border-slate-200">
+        <section id="faq" className="scroll-mt-40 py-24 relative bg-slate-50 border-y border-slate-200">
           <div className="container-width max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading text-slate-900 text-center">
               Sık sorulan sorular
@@ -862,7 +867,13 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-indigo-50/50 pointer-events-none"></div>
           <div className="container-width relative z-10">
             <div className="relative rounded-3xl overflow-hidden bg-indigo-600 px-6 py-14 text-center md:px-16 md:py-18 shadow-2xl shadow-indigo-200 border border-indigo-500">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1626379953822-baec8cd418e7?q=80&w=2832&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay opacity-30 grayscale"></div>
+              <div
+                className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30 grayscale"
+                style={{
+                  backgroundImage:
+                    "url(https://images.unsplash.com/photo-1626379953822-baec8cd418e7?q=80&w=2832&auto=format&fit=crop)",
+                }}
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-indigo-900/80 to-transparent"></div>
 
               <div className="relative z-10 max-w-3xl mx-auto">

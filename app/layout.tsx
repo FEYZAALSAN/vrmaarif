@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Caveat } from "next/font/google";
+import { CampaignTicker } from "@/components/layout/CampaignTicker";
 import "./globals.css";
 
 const inter = Inter({
@@ -36,6 +37,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${plusJakarta.variable} ${caveat.variable} antialiased bg-white text-slate-900`}
       >
+        <CampaignTicker />
         {children}
       </body>
     </html>

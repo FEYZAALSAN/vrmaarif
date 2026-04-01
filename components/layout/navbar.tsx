@@ -22,7 +22,7 @@ export function Navbar() {
     return (
         <motion.header
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+                "fixed left-0 right-0 top-10 z-50 transition-all duration-300",
                 isScrolled ? "glass py-3" : "bg-transparent py-5"
             )}
             initial={{ y: -100 }}

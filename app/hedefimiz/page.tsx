@@ -8,7 +8,7 @@ export default function HedefimizPage() {
   return (
     <div className="flex min-h-screen flex-col bg-white text-slate-900">
       <Navbar />
-      <main className="container-width flex flex-grow flex-col justify-center px-4 py-28 md:py-32">
+      <main className="container-width flex flex-grow flex-col justify-center px-4 pb-28 pt-36 md:pb-32 md:pt-40">
         <div className="mx-auto w-full max-w-3xl rounded-3xl border border-slate-200 bg-white p-8 shadow-[0_18px_45px_-24px_rgba(79,70,229,0.35)] md:p-12">
           <h1 className="font-heading text-3xl font-bold tracking-tight md:text-4xl">
             Geleceğin Eğitim Vizyonu: MetaAkademi ile Sınırları Aşın
