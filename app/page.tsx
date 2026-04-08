@@ -768,8 +768,8 @@ export default function Home() {
               <p className="text-sm text-slate-500 uppercase tracking-wider">VR Ders İçeriği</p>
             </div>
             <div>
-              <h4 className="text-3xl font-bold text-slate-900 mb-1">5.000+</h4>
-              <p className="text-sm text-slate-500 uppercase tracking-wider">Mutlu Öğrenci</p>
+              <h4 className="text-3xl font-bold text-slate-900 mb-1">Hedefimiz</h4>
+              <p className="text-sm text-slate-500 uppercase tracking-wider">+5000 Mutlu Öğrenciye Ulaşmak</p>
             </div>
             <div>
               <h4 className="text-3xl font-bold text-slate-900 mb-1">%40</h4>
