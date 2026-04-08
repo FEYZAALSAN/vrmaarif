@@ -33,10 +33,10 @@ export function Navbar() {
                 {/* Logo */}
                 <Link
                     href="/"
-                    className="z-50 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40"
+                    className="z-50 min-w-0 max-w-[calc(100vw-5rem)] shrink rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 md:max-w-none"
                 >
-                    <span className="flex items-center gap-0 md:gap-0.5">
-                        <span className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl md:h-16 md:w-16">
+                    <span className="flex min-w-0 items-center gap-0 md:gap-0.5">
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl sm:h-14 sm:w-14 md:h-16 md:w-16">
                             <Image
                                 src="/brand/metakademi-logo.png?v=20260401"
                                 alt="MetaAkademi logo"
@@ -54,7 +54,7 @@ export function Navbar() {
                             height={120}
                             priority
                             unoptimized
-                            className="hidden h-20 w-auto -ml-6 object-contain md:block"
+                            className="h-10 w-auto max-h-10 max-w-[min(200px,calc(100vw-6.75rem))] min-w-0 object-contain object-left -ml-4 sm:h-12 sm:max-h-12 sm:max-w-[min(240px,calc(100vw-7rem))] md:-ml-6 md:h-20 md:max-h-none md:max-w-none"
                         />
                     </span>
                 </Link>
@@ -104,9 +104,39 @@ export function Navbar() {
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="absolute top-0 left-0 w-full h-screen bg-white/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden dark:bg-slate-950/95"
+                        className="absolute top-0 left-0 z-40 flex min-h-screen w-full flex-col items-stretch justify-center gap-2 bg-white/95 px-6 py-10 backdrop-blur-xl md:hidden dark:bg-slate-950/95"
                     >
-                        <div className="flex flex-col gap-4 mt-8 w-full px-8">
+                        <nav className="mx-auto flex w-full max-w-sm flex-col gap-1 text-center text-base font-semibold text-slate-700">
+                            <Link
+                                href="/#features"
+                                className="rounded-xl py-3 transition-colors hover:bg-violet-50 hover:text-primary"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Koçluk
+                            </Link>
+                            <Link
+                                href="/hedefimiz"
+                                className="rounded-xl py-3 transition-colors hover:bg-violet-50 hover:text-primary"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Hedefimiz
+                            </Link>
+                            <Link
+                                href="/#testimonials"
+                                className="rounded-xl py-3 transition-colors hover:bg-violet-50 hover:text-primary"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Derecelerimiz
+                            </Link>
+                            <Link
+                                href="/#features"
+                                className="rounded-xl py-3 transition-colors hover:bg-violet-50 hover:text-primary"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Biz Kimiz
+                            </Link>
+                        </nav>
+                        <div className="mx-auto mt-6 flex w-full max-w-sm flex-col gap-3 border-t border-slate-200 pt-6 dark:border-slate-800">
                             <Button
                                 onClick={() => {
                                     setIsMobileMenuOpen(false);
