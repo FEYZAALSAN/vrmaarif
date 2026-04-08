@@ -1,7 +1,8 @@
 "use client";
 
 /** Üst kampanya bandında gösterilecek metin — burayı güncelleyebilirsiniz. */
-export const CAMPAIGN_TICKER_TEXT = "Yakında Sizlerleyiz...";
+export const CAMPAIGN_TICKER_TEXT =
+  "Henüz Yolun Başındayız. Hazırlık Sürecindeyiz. Takipte Kalın...";
 
 const REPEAT = 8;
 
